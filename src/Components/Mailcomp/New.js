@@ -1,8 +1,11 @@
+import { createContext } from "react"
+import { LoginContext } from "../../Context/LoginContext"
 export default function New(){
+    const {user} = createContext(LoginContext)
     return(<div className="antialiased bg-gray-100">
-        <div class="text-white text-center bg-red-400 py-2 font-medium">
-        Uh-oh...You have 9 credits left. <a class="font-regular underline" href="https://warmer.ai/settings/plan">Upgrade now!</a>
-        </div>
+         {user&&(user.Emailquantity<15)&&<div class="text-white text-center bg-red-400 py-2 font-medium">
+        Uh-oh...You have {user.Emailquantity} credits left. <a class="font-regular underline" href="https://warmer.ai/settings/plan">Upgrade now!</a>
+        </div>}
         
                 <main>
                 <div class="max-w-full md:w-12/12 mx-auto sm:p-5">

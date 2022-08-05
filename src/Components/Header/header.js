@@ -1,8 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition,Popover, } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-
+import React, { Fragment,useContext } from 'react'
+import { useNavigate } from "react-router-dom";
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import {  MenuIcon, XIcon } from '@heroicons/react/outline'
+import { LoginContext } from '../../Context/LoginContext';
 const navigation = [
   { name: 'New Email', href: '#', current: true },
   { name: 'Compaign', href: '#', current: false },
@@ -13,7 +14,30 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Example(props) {
+  const history = useNavigate();
+  const {user,token,setUser,setToken} = useContext(LoginContext)
+  const [check,setCheck] = React.useState(true)
+
+  const signUpClick=() => {
+     setCheck(true)
+     history("/register")
+  }
+
+  const signInClick=() =>{
+    setCheck(false)
+    history("/login")
+  }
+
+  const logout =() => {
+    setUser(null)
+    setToken(null)
+    localStorage.clear()
+    history("/")
+  }
+  React.useEffect(() =>{
+
+  },[user,token])
   return (
     <Disclosure as="nav" className="bg-white-800">
       {({ open }) => (
@@ -32,19 +56,21 @@ export default function Example() {
                 </Disclosure.Button>
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex-shrink-0 flex items-center">
+                <div className="flex-shrink-0 flex items-center" style={{cursor:"pointer"}}>
                   <img
                     className="block lg:hidden h-8 w-auto"
                     src="https://warmer.ai/logo.png"
                     alt="Workflow"
+                    onClick={e => history("/")}
                   />
                   <img
                     className="hidden lg:block h-8 w-auto"
                     src="https://warmer.ai/logo.png"
                     alt="Workflow"
+                    onClick={e => history("/")}
                   />
                 </div>
-                <div className="hidden sm:block sm:ml-6">
+                {(user||token)&&<div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <a
@@ -60,11 +86,11 @@ export default function Example() {
                       </a>
                     ))}
                   </div>
-                </div>
+                </div>}
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
+                {(token||user)&&<Menu as="div" className="ml-3 relative">
                   <div>
                     <Menu.Button className="flex text-sm h-8 w-8 rounded-full">
                       <span className="sr-only">Open user menu</span>
@@ -106,7 +132,7 @@ export default function Example() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={e => logout()}
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Sign out
@@ -115,16 +141,16 @@ export default function Example() {
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
-                </Menu>
-                     {/* <div>
+                </Menu>}
+                     {(!user&&!token)&&<div>
                      
-                        <button className="btn bg-white-500 mx-0.5">Sign in</button>
-                        <button className="btn bg-black text-white">Sign Up</button>
-                    </div> */}
+                        <button className={!check?"btn bg-black text-white":"btn bg-white-500 mx-0.5"} onClick={e => signInClick()}>Sign in</button>
+                        <button className={check?"btn bg-black text-white":"btn bg-white-500 mx-0.5"} onClick={e => signUpClick()}>Sign Up</button>
+                    </div>}
 
-                    <div>
-                    <button className="btn bg-green-500 text-white ml-2">9 - credits -Upgrade Now</button>
-                    </div>
+                    {(user||token)&&<div>
+                    <button className="btn bg-green-500 text-white ml-2">{user&&user.Emailquantity} - credits -Upgrade Now</button>
+                    </div>}
               </div>
             </div>
           </div>
