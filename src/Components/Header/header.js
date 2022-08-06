@@ -16,7 +16,8 @@ function classNames(...classes) {
 
 export default function Example(props) {
   const history = useNavigate();
-  const {user,token,setUser,setToken} = useContext(LoginContext)
+  const {user,token,setUser,setToken,openModal} = useContext(LoginContext)
+  // const {openModal} = props
   const [check,setCheck] = React.useState(true)
 
   const signUpClick=() => {
@@ -73,9 +74,9 @@ export default function Example(props) {
                 {(user||token)&&<div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <button
                         key={item.name}
-                        href={item.href}
+                        onClick = {e => openModal(item.name)}
                         className={classNames(
                           item.current ? 'text-black-300 hover:bg-white-700 hover:text-black shadow-md' : 'text-black-300 hover:shadow-md',
                           'px-3 py-2 rounded-md text-sm font-medium'
@@ -83,7 +84,7 @@ export default function Example(props) {
                         aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </div>}
@@ -148,8 +149,12 @@ export default function Example(props) {
                         <button className={check?"btn bg-black text-white":"btn bg-white-500 mx-0.5"} onClick={e => signUpClick()}>Sign Up</button>
                     </div>}
 
-                    {(user||token)&&<div>
-                    <button className="btn bg-green-500 text-white ml-2">{user&&user.Emailquantity} - credits -Upgrade Now</button>
+                    {((user&&!user.Premium)||token)&&<div>
+                    <button className="btn bg-green-500 text-white ml-2" onClick={e => history("/premium")}>{user&&user.Emailquantity} - credits -Upgrade Now</button>
+                    </div>}
+
+                    {((user&&user.Premium)||token)&&<div>
+                    <button className="btn bg-green-500 text-white ml-2" onClick={e => history("/premium")}>{user&&user.Emailquantity} - credits -Premium User</button>
                     </div>}
               </div>
             </div>

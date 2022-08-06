@@ -1,20 +1,74 @@
-import { createContext } from "react"
+import React, { createContext, useState } from "react"
 import { LoginContext } from "../../Context/LoginContext"
-export default function New(){
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+export default function New(props){
     const {user} = createContext(LoginContext)
+    const{open,handleClose,getEmaildata} =props
+     const [onlineProfileUrl,setOnlineProfileUrl] = useState(null)
+    const [typeOfUrl,setTypeOfUrl] = useState(null)
+    const [GoalOfEmail,setGoalOfEmail] = useState(null)
     return(<div className="antialiased bg-gray-100">
          {user&&(user.Emailquantity<15)&&<div class="text-white text-center bg-red-400 py-2 font-medium">
         Uh-oh...You have {user.Emailquantity} credits left. <a class="font-regular underline" href="https://warmer.ai/settings/plan">Upgrade now!</a>
         </div>}
-        
+        <div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+          <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">What are we pitching?</h1>
+          <h1 className="text-gray-500 font-md font-medium tracking-normal leading-tight mb-4">This teaches our AI about your company</h1>
+            <label htmlFor="name" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
+                Online Profile Url
+                </label>
+            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="URL" />
+            <label htmlFor="name" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
+                Type of Url
+                </label>
+            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="URL" />
+            <label htmlFor="name" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
+                Goal of url
+                </label>
+            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="Goal" />
+            <div className="flex items-center justify-start w-full">
+                            <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm" onClick={e => getEmaildata()}>Submit</button>
+            </div>
+          </Box>
+        </Fade>
+      </Modal>
+    </div>
                 <main>
                 <div class="max-w-full md:w-12/12 mx-auto sm:p-5">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 <div class="py-4">
-                <div class="max-w-7xl mx-auto my-4 space-y-2">
-                <h1 class="text-2xl font-semibold text-gray-900">New Email Wizard</h1>
+                <div className="max-w-7xl mx-auto my-4 space-y-2">
+                <h1 className="text-2xl font-semibold text-gray-900">New Email Wizard</h1>
                 </div>
-        <form>
+                
+      
         <nav aria-label="Progress">
             <ol class="border border-gray-300 rounded-md divide-y divide-gray-300 md:flex md:divide-y-0 bg-white">
             <li class="relative md:flex-1 md:flex cursor-default">
@@ -113,7 +167,6 @@ export default function New(){
             <div class="mt-4 flex md:mt-0 md:ml-4">
             </div>
             </div>
-            </form>
             </div>
             </div>
             </div>
